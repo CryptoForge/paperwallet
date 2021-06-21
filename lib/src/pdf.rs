@@ -13,7 +13,7 @@ use printpdf::*;
  * Save the list of wallets (address + private keys) to the given PDF file name.
  */
 pub fn save_to_pdf(addresses: &str, filename: &str) -> Result<(), String> {
-    let (doc, page1, layer1) = PdfDocument::new("Pirate Sapling Paper Wallet", Mm(210.0), Mm(297.0), "Layer 1");
+    let (doc, page1, layer1) = PdfDocument::new("Arrow Sapling Paper Wallet", Mm(210.0), Mm(297.0), "Layer 1");
 
     let font  = doc.add_builtin_font(BuiltinFont::Courier).unwrap();
     let font_bold = doc.add_builtin_font(BuiltinFont::CourierBold).unwrap();
@@ -89,7 +89,7 @@ pub fn save_to_pdf(addresses: &str, filename: &str) -> Result<(), String> {
         current_layer.set_outline_thickness(2.0);
 
 	// Set title
-	current_layer.use_text("Treasure Your Privacy", 32.0, Mm(37.0), Mm(277.0), &font_bold);
+	current_layer.use_text("Arrow Paper Waller", 32.0, Mm(37.0), Mm(277.0), &font_bold);
 
         // Draw lines
         current_layer.add_shape(line1);
@@ -169,14 +169,14 @@ fn add_address_to_page(current_layer: &PdfLayerReference, font: &IndirectFontRef
     let ypos = 297.0        - 5.0       - 57.0            - (140.0 * pos as f64);
     add_qrcode_image_to_page(current_layer, scaledimg, finalsize, Mm(10.0), Mm(ypos));
 
-    current_layer.use_text("ARRR Receiving Address (Sapling)", 14.0, Mm(55.0), Mm(ypos+27.5), &font_bold);
+    current_layer.use_text("ARW Receiving Address (Sapling)", 14.0, Mm(55.0), Mm(ypos+27.5), &font_bold);
 
     let strs = split_to_max(&address, 39, 39);  // No spaces, so user can copy the address
     for i in 0..strs.len() {
         current_layer.use_text(strs[i].clone(), 12.0, Mm(55.0), Mm(ypos+20.0-((i*5) as f64)), &font);
     }
 
-    current_layer.use_text("ARRR Diversified Addresses (Sapling)", 12.0, Mm(55.0), Mm(ypos+6.0), &font_bold);
+    current_layer.use_text("ARW Diversified Addresses (Sapling)", 12.0, Mm(55.0), Mm(ypos+6.0), &font_bold);
     current_layer.use_text(d1, 8.5, Mm(55.0), Mm(ypos+1.5), &font);
     current_layer.use_text(d2, 8.5, Mm(55.0), Mm(ypos-2.0), &font);
     current_layer.use_text(d3, 8.5, Mm(55.0), Mm(ypos-5.5), &font);

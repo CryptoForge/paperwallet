@@ -32,58 +32,58 @@ cargo clean
 cargo build --release 
 
 # macOS
-rm -rf target/macOS-piratepaperwallet-v$APP_VERSION
-mkdir -p target/macOS-piratepaperwallet-v$APP_VERSION
-cp target/release/piratepaperwallet target/macOS-piratepaperwallet-v$APP_VERSION/
+rm -rf target/macOS-arrowpaperwallet-v$APP_VERSION
+mkdir -p target/macOS-arrowpaperwallet-v$APP_VERSION
+cp target/release/arrowpaperwallet target/macOS-arrowpaperwallet-v$APP_VERSION/
 
 # For Windows and Linux, build via docker
-docker run --rm -v $(pwd)/..:/opt/piratepaperwallet rustbuild:latest bash -c "cd /opt/piratepaperwallet/cli && cargo build --release && cargo build --release --target x86_64-pc-windows-gnu && cargo build --release --target aarch64-unknown-linux-gnu"
+docker run --rm -v $(pwd)/..:/opt/arrowpaperwallet rustbuild:latest bash -c "cd /opt/arrowpaperwallet/cli && cargo build --release && cargo build --release --target x86_64-pc-windows-gnu && cargo build --release --target aarch64-unknown-linux-gnu"
 
 # Now sign and zip the binaries
-gpg --batch --output target/macOS-piratepaperwallet-v$APP_VERSION/piratepaperwallet.sig --detach-sig target/macOS-piratepaperwallet-v$APP_VERSION/piratepaperwallet 
+gpg --batch --output target/macOS-arrowpaperwallet-v$APP_VERSION/arrowpaperwallet.sig --detach-sig target/macOS-arrowpaperwallet-v$APP_VERSION/arrowpaperwallet 
 cd target
-cd macOS-piratepaperwallet-v$APP_VERSION
-gsha256sum piratepaperwallet > sha256sum.txt
+cd macOS-arrowpaperwallet-v$APP_VERSION
+gsha256sum arrowpaperwallet > sha256sum.txt
 cd ..
-zip -r macOS-piratepaperwallet-v$APP_VERSION.zip macOS-piratepaperwallet-v$APP_VERSION 
+zip -r macOS-arrowpaperwallet-v$APP_VERSION.zip macOS-arrowpaperwallet-v$APP_VERSION 
 cd ..
 
 
 #Linux
-rm -rf target/linux-piratepaperwallet-v$APP_VERSION
-mkdir -p target/linux-piratepaperwallet-v$APP_VERSION
-cp target/release/piratepaperwallet target/linux-piratepaperwallet-v$APP_VERSION/
-gpg --batch --output target/linux-piratepaperwallet-v$APP_VERSION/piratepaperwallet.sig --detach-sig target/linux-piratepaperwallet-v$APP_VERSION/piratepaperwallet
+rm -rf target/linux-arrowpaperwallet-v$APP_VERSION
+mkdir -p target/linux-arrowpaperwallet-v$APP_VERSION
+cp target/release/arrowpaperwallet target/linux-arrowpaperwallet-v$APP_VERSION/
+gpg --batch --output target/linux-arrowpaperwallet-v$APP_VERSION/arrowpaperwallet.sig --detach-sig target/linux-arrowpaperwallet-v$APP_VERSION/arrowpaperwallet
 cd target
-cd linux-piratepaperwallet-v$APP_VERSION
-gsha256sum piratepaperwallet > sha256sum.txt
+cd linux-arrowpaperwallet-v$APP_VERSION
+gsha256sum arrowpaperwallet > sha256sum.txt
 cd ..
-zip -r linux-piratepaperwallet-v$APP_VERSION.zip linux-piratepaperwallet-v$APP_VERSION 
+zip -r linux-arrowpaperwallet-v$APP_VERSION.zip linux-arrowpaperwallet-v$APP_VERSION 
 cd ..
 
 
 #Windows
-rm -rf target/Windows-piratepaperwallet-v$APP_VERSION
-mkdir -p target/Windows-piratepaperwallet-v$APP_VERSION
-cp target/x86_64-pc-windows-gnu/release/piratepaperwallet.exe target/Windows-piratepaperwallet-v$APP_VERSION/
-gpg --batch --output target/Windows-piratepaperwallet-v$APP_VERSION/piratepaperwallet.sig --detach-sig target/Windows-piratepaperwallet-v$APP_VERSION/piratepaperwallet.exe
+rm -rf target/Windows-arrowpaperwallet-v$APP_VERSION
+mkdir -p target/Windows-arrowpaperwallet-v$APP_VERSION
+cp target/x86_64-pc-windows-gnu/release/arrowpaperwallet.exe target/Windows-arrowpaperwallet-v$APP_VERSION/
+gpg --batch --output target/Windows-arrowpaperwallet-v$APP_VERSION/arrowpaperwallet.sig --detach-sig target/Windows-arrowpaperwallet-v$APP_VERSION/arrowpaperwallet.exe
 cd target
-cd Windows-piratepaperwallet-v$APP_VERSION
-gsha256sum piratepaperwallet.exe > sha256sum.txt
+cd Windows-arrowpaperwallet-v$APP_VERSION
+gsha256sum arrowpaperwallet.exe > sha256sum.txt
 cd ..
-zip -r Windows-piratepaperwallet-v$APP_VERSION.zip Windows-piratepaperwallet-v$APP_VERSION 
+zip -r Windows-arrowpaperwallet-v$APP_VERSION.zip Windows-arrowpaperwallet-v$APP_VERSION 
 cd ..
 
 
 # aarch64 (armv8)
-rm -rf target/aarch64-piratepaperwallet-v$APP_VERSION
-mkdir -p target/aarch64-piratepaperwallet-v$APP_VERSION
-cp target/aarch64-unknown-linux-gnu/release/piratepaperwallet target/aarch64-piratepaperwallet-v$APP_VERSION/
-gpg --batch --output target/aarch64-piratepaperwallet-v$APP_VERSION/piratepaperwallet.sig --detach-sig target/aarch64-piratepaperwallet-v$APP_VERSION/piratepaperwallet
+rm -rf target/aarch64-arrowpaperwallet-v$APP_VERSION
+mkdir -p target/aarch64-arrowpaperwallet-v$APP_VERSION
+cp target/aarch64-unknown-linux-gnu/release/arrowpaperwallet target/aarch64-arrowpaperwallet-v$APP_VERSION/
+gpg --batch --output target/aarch64-arrowpaperwallet-v$APP_VERSION/arrowpaperwallet.sig --detach-sig target/aarch64-arrowpaperwallet-v$APP_VERSION/arrowpaperwallet
 cd target
-cd aarch64-piratepaperwallet-v$APP_VERSION
-gsha256sum piratepaperwallet > sha256sum.txt
+cd aarch64-arrowpaperwallet-v$APP_VERSION
+gsha256sum arrowpaperwallet > sha256sum.txt
 cd ..
-zip -r aarch64-piratepaperwallet-v$APP_VERSION.zip aarch64-piratepaperwallet-v$APP_VERSION 
+zip -r aarch64-arrowpaperwallet-v$APP_VERSION.zip aarch64-arrowpaperwallet-v$APP_VERSION 
 cd ..
 

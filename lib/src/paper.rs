@@ -57,10 +57,10 @@ pub struct CoinParams {
 
 pub fn params() -> CoinParams {
     CoinParams {
-        zaddress_prefix  : "zs".to_string(),
+        zaddress_prefix  : "as".to_string(),
         zsecret_prefix   : "secret-extended-key-main".to_string(),
-        zviewkey_prefix  : "zxviews".to_string(),
-        cointype         : 141
+        zviewkey_prefix  : "axviews".to_string(),
+        cointype         : 350
     }
 }
 
@@ -415,7 +415,7 @@ fn gen_addresses_with_seed_as_json<F>(count: u32, mut get_seed: F, coin_type: u3
     return json::stringify_pretty(ans, 2);
 }
 
-/// Generate a standard ZIP-32 address from the given seed at 32'/141'/0'/index
+/// Generate a standard ZIP-32 address from the given seed at 32'/350'/0'/index
 fn get_address(seed: &[u8], index: u32, coin_type: u32, nobip39: bool) -> (String, json::JsonValue, String, String, json::JsonValue) {
 
     let bip39seed = bip39::Seed::new(&Mnemonic::from_entropy(&seed, Language::English).unwrap(), "");
