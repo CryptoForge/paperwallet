@@ -1,19 +1,19 @@
 extern crate clap;
-extern crate piratepaperlib;
+extern crate zeropaperlib;
 
 mod version;
 
 use clap::{Arg, App};
-use piratepaperlib::paper::*;
-use piratepaperlib::pdf;
+use zeropaperlib::paper::*;
+use zeropaperlib::pdf;
 use std::io;
 use std::io::prelude::*;
 use hex;
 
 fn main() {
-    let matches = App::new("piratepaperwallet")
+    let matches = App::new("zeropaperwallet")
        .version(version::version())
-       .about("A command line Pirate Sapling paper wallet generator")
+       .about("A command line Zero paper wallet generator")
        .arg(Arg::with_name("format")
                 .short("f")
                 .long("format")
@@ -25,7 +25,7 @@ fn main() {
        .arg(Arg::with_name("nohd")
                 .short("n")
                 .long("nohd")
-                .help("Don't reuse HD keys. Normally, piratepaperwallet will use the same HD key to derive multiple addresses. This flag will use a new seed for each address"))
+                .help("Don't reuse HD keys. Normally, zeropaperwallet will use the same HD key to derive multiple addresses. This flag will use a new seed for each address"))
        .arg(Arg::with_name("nobip39")
                 .short("b")
                 .long("nobip39")
@@ -64,7 +64,7 @@ fn main() {
                 .long("cointype")
                 .help("The Bip44 coin type used in the derivation path")
                 .takes_value(true)
-                .default_value("141")
+                .default_value("323")
                 .validator(|i:String| match i.parse::<i32>() {
                         Ok(_)   => return Ok(()),
                         Err(_)  => return Err(format!("BIP44CoinType '{}' is not a number", i))
@@ -131,8 +131,8 @@ fn main() {
 
         match cointype {
             Some(s) => {
-                if s != 141 {
-                    eprintln!("Vanity mode will only run with Bip44CoinType 141, you specified {}", s);
+                if s != 323 {
+                    eprintln!("Vanity mode will only run with Bip44CoinType 323, you specified {}", s);
                     return;
                 }},
             None => {}

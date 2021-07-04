@@ -1,5 +1,5 @@
 [package]
-name = "piratepaperlib"
+name = "zeropaperlib"
 version = "0.1.0"
 authors = ["mrlynch"]
 edition = "2018"

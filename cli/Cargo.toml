@@ -1,12 +1,12 @@
 [package]
-name = "piratepaperwallet"
+name = "zeropaperwallet"
 version = "0.1.0"
 authors = ["mrlynch"]
 edition = "2018"
 
 [dependencies]
 clap = "2.33.0"
-piratepaperlib = { path = "../lib" }
+zeropaperlib = { path = "../lib" }
 json = "0.11.14"
 printpdf = "0.3.2"
 hex = "0.3"

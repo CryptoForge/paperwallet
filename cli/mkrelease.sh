@@ -32,58 +32,58 @@ cargo clean
 cargo build --release 
 
 # macOS
-rm -rf target/macOS-piratepaperwallet-v$APP_VERSION
-mkdir -p target/macOS-piratepaperwallet-v$APP_VERSION
-cp target/release/piratepaperwallet target/macOS-piratepaperwallet-v$APP_VERSION/
+rm -rf target/macOS-zeropaperwallet-v$APP_VERSION
+mkdir -p target/macOS-zeropaperwallet-v$APP_VERSION
+cp target/release/zeropaperwallet target/macOS-zeropaperwallet-v$APP_VERSION/
 
 # For Windows and Linux, build via docker
-docker run --rm -v $(pwd)/..:/opt/piratepaperwallet rustbuild:latest bash -c "cd /opt/piratepaperwallet/cli && cargo build --release && cargo build --release --target x86_64-pc-windows-gnu && cargo build --release --target aarch64-unknown-linux-gnu"
+docker run --rm -v $(pwd)/..:/opt/zeropaperwallet rustbuild:latest bash -c "cd /opt/zeropaperwallet/cli && cargo build --release && cargo build --release --target x86_64-pc-windows-gnu && cargo build --release --target aarch64-unknown-linux-gnu"
 
 # Now sign and zip the binaries
-gpg --batch --output target/macOS-piratepaperwallet-v$APP_VERSION/piratepaperwallet.sig --detach-sig target/macOS-piratepaperwallet-v$APP_VERSION/piratepaperwallet 
+gpg --batch --output target/macOS-zeropaperwallet-v$APP_VERSION/zeropaperwallet.sig --detach-sig target/macOS-zeropaperwallet-v$APP_VERSION/zeropaperwallet 
 cd target
-cd macOS-piratepaperwallet-v$APP_VERSION
-gsha256sum piratepaperwallet > sha256sum.txt
+cd macOS-zeropaperwallet-v$APP_VERSION
+gsha256sum zeropaperwallet > sha256sum.txt
 cd ..
-zip -r macOS-piratepaperwallet-v$APP_VERSION.zip macOS-piratepaperwallet-v$APP_VERSION 
+zip -r macOS-zeropaperwallet-v$APP_VERSION.zip macOS-zeropaperwallet-v$APP_VERSION 
 cd ..
 
 
 #Linux
-rm -rf target/linux-piratepaperwallet-v$APP_VERSION
-mkdir -p target/linux-piratepaperwallet-v$APP_VERSION
-cp target/release/piratepaperwallet target/linux-piratepaperwallet-v$APP_VERSION/
-gpg --batch --output target/linux-piratepaperwallet-v$APP_VERSION/piratepaperwallet.sig --detach-sig target/linux-piratepaperwallet-v$APP_VERSION/piratepaperwallet
+rm -rf target/linux-zeropaperwallet-v$APP_VERSION
+mkdir -p target/linux-zeropaperwallet-v$APP_VERSION
+cp target/release/zeropaperwallet target/linux-zeropaperwallet-v$APP_VERSION/
+gpg --batch --output target/linux-zeropaperwallet-v$APP_VERSION/zeropaperwallet.sig --detach-sig target/linux-zeropaperwallet-v$APP_VERSION/zeropaperwallet
 cd target
-cd linux-piratepaperwallet-v$APP_VERSION
-gsha256sum piratepaperwallet > sha256sum.txt
+cd linux-zeropaperwallet-v$APP_VERSION
+gsha256sum zeropaperwallet > sha256sum.txt
 cd ..
-zip -r linux-piratepaperwallet-v$APP_VERSION.zip linux-piratepaperwallet-v$APP_VERSION 
+zip -r linux-zeropaperwallet-v$APP_VERSION.zip linux-zeropaperwallet-v$APP_VERSION 
 cd ..
 
 
 #Windows
-rm -rf target/Windows-piratepaperwallet-v$APP_VERSION
-mkdir -p target/Windows-piratepaperwallet-v$APP_VERSION
-cp target/x86_64-pc-windows-gnu/release/piratepaperwallet.exe target/Windows-piratepaperwallet-v$APP_VERSION/
-gpg --batch --output target/Windows-piratepaperwallet-v$APP_VERSION/piratepaperwallet.sig --detach-sig target/Windows-piratepaperwallet-v$APP_VERSION/piratepaperwallet.exe
+rm -rf target/Windows-zeropaperwallet-v$APP_VERSION
+mkdir -p target/Windows-zeropaperwallet-v$APP_VERSION
+cp target/x86_64-pc-windows-gnu/release/zeropaperwallet.exe target/Windows-zeropaperwallet-v$APP_VERSION/
+gpg --batch --output target/Windows-zeropaperwallet-v$APP_VERSION/zeropaperwallet.sig --detach-sig target/Windows-zeropaperwallet-v$APP_VERSION/zeropaperwallet.exe
 cd target
-cd Windows-piratepaperwallet-v$APP_VERSION
-gsha256sum piratepaperwallet.exe > sha256sum.txt
+cd Windows-zeropaperwallet-v$APP_VERSION
+gsha256sum zeropaperwallet.exe > sha256sum.txt
 cd ..
-zip -r Windows-piratepaperwallet-v$APP_VERSION.zip Windows-piratepaperwallet-v$APP_VERSION 
+zip -r Windows-zeropaperwallet-v$APP_VERSION.zip Windows-zeropaperwallet-v$APP_VERSION 
 cd ..
 
 
 # aarch64 (armv8)
-rm -rf target/aarch64-piratepaperwallet-v$APP_VERSION
-mkdir -p target/aarch64-piratepaperwallet-v$APP_VERSION
-cp target/aarch64-unknown-linux-gnu/release/piratepaperwallet target/aarch64-piratepaperwallet-v$APP_VERSION/
-gpg --batch --output target/aarch64-piratepaperwallet-v$APP_VERSION/piratepaperwallet.sig --detach-sig target/aarch64-piratepaperwallet-v$APP_VERSION/piratepaperwallet
+rm -rf target/aarch64-zeropaperwallet-v$APP_VERSION
+mkdir -p target/aarch64-zeropaperwallet-v$APP_VERSION
+cp target/aarch64-unknown-linux-gnu/release/zeropaperwallet target/aarch64-zeropaperwallet-v$APP_VERSION/
+gpg --batch --output target/aarch64-zeropaperwallet-v$APP_VERSION/zeropaperwallet.sig --detach-sig target/aarch64-zeropaperwallet-v$APP_VERSION/zeropaperwallet
 cd target
-cd aarch64-piratepaperwallet-v$APP_VERSION
-gsha256sum piratepaperwallet > sha256sum.txt
+cd aarch64-zeropaperwallet-v$APP_VERSION
+gsha256sum zeropaperwallet > sha256sum.txt
 cd ..
-zip -r aarch64-piratepaperwallet-v$APP_VERSION.zip aarch64-piratepaperwallet-v$APP_VERSION 
+zip -r aarch64-zeropaperwallet-v$APP_VERSION.zip aarch64-zeropaperwallet-v$APP_VERSION 
 cd ..
 
