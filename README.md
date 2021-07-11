@@ -50,6 +50,9 @@ sudo unshare -n ./target/release/zeropaperwallet
 
 ## Help options
 ```
+zeropaperwallet 0.4
+A command line Zero paper wallet generator
+
 USAGE:
     zeropaperwallet [FLAGS] [OPTIONS] [output]
 
@@ -61,13 +64,14 @@ FLAGS:
     -V, --version    Prints version information
 
 OPTIONS:
-    -t, --cointype <BIP44CoinType>    The Bip44 coin type used in the derivation path [default: 323]
+    -c, --cointype <BIP44CoinType>    The Bip44 coin type used in the derivation path [default: 323]
     -e, --entropy <entropy>           Provide additional entropy to the random number generator. Any random string,
                                       containing 32-64 characters
     -f, --format <FORMAT>             What format to generate the output in: json or pdf [default: json]  [possible
                                       values: pdf, json]
     -s, --hdseed <hdseed>             Generate Wallet from 32 byte hex HDSeed
     -p, --phrase <phrase>             Generate Wallet from 24 word seed phrase
+    -t, --taddrs <t_addresses>        Number of t addresses to generate [default: 0]
         --threads <threads>           Number of threads to use for the vanity address generator. Set this to the number
                                       of CPUs you have [default: 1]
         --vanity <vanity_prefix>      Generate a vanity address with the given prefix
