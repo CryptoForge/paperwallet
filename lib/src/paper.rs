@@ -14,7 +14,9 @@ use std::panic;
 use std::time::{SystemTime};
 use zcash_primitives::zip32::{DiversifierIndex, DiversifierKey, ChildIndex, ExtendedSpendingKey, ExtendedFullViewingKey};
 
+// use extended_key::{ExtendedPrivKey, KeyIndex};
 use bip39::{Language, Mnemonic};
+use taddresslib::address::*;
 
 /// A trait for converting a [u8] to base58 encoded string.
 pub trait ToBase58Check {
@@ -302,7 +304,7 @@ pub fn generate_vanity_wallet(num_threads: u32, prefix: String) -> Result<String
 }
 
 /// Generate a series of `count` addresses and private keys.
-pub fn generate_wallet(nohd: bool, count: u32, user_entropy: &[u8], coin_type: Option<u32>, nobip39: bool) -> String {
+pub fn generate_wallet(nohd: bool, zcount: u32, tcount: u32, user_entropy: &[u8], coin_type: Option<u32>, nobip39: bool) -> String {
     // Get 32 bytes of system entropy
     let mut system_entropy:[u8; 32] = [0; 32];
     #[cfg(feature = "systemrand")]
@@ -340,10 +342,10 @@ pub fn generate_wallet(nohd: bool, count: u32, user_entropy: &[u8], coin_type: O
         let mut seed: [u8; 32] = [0; 32];
         rng.fill(&mut seed);
 
-        return gen_addresses_with_seed_as_json(count, |i| (seed.to_vec(), i), cointype, nobip39);
+        return gen_addresses_with_seed_as_json(zcount, tcount, |i| (seed.to_vec(), i), cointype, nobip39);
     } else {
         // Not using HD addresses, so derive a new seed every time
-        return gen_addresses_with_seed_as_json(count, |_| {
+        return gen_addresses_with_seed_as_json(zcount, tcount, |_| {
             let mut seed:[u8; 32] = [0; 32];
             rng.fill(&mut seed);
 
@@ -353,7 +355,7 @@ pub fn generate_wallet(nohd: bool, count: u32, user_entropy: &[u8], coin_type: O
 }
 
 /// Generate a series of `count` addresses and private keys from given seed phrase
-pub fn generate_wallet_from_seed_phrase(count: u32, phrase: String, coin_type: Option<u32>, nobip39: bool) -> String {
+pub fn generate_wallet_from_seed_phrase(zcount: u32, tcount: u32, phrase: String, coin_type: Option<u32>, nobip39: bool) -> String {
 
     let phrase = match Mnemonic::from_phrase(phrase.clone(), Language::English) {
         Ok(p) => p,
@@ -368,19 +370,19 @@ pub fn generate_wallet_from_seed_phrase(count: u32, phrase: String, coin_type: O
         None => params().cointype
     };
 
-    return gen_addresses_with_seed_as_json(count, |i| (seed.to_vec(), i), cointype, nobip39);
+    return gen_addresses_with_seed_as_json(zcount, tcount, |i| (seed.to_vec(), i), cointype, nobip39);
 
 }
 
 /// Generate a series of `count` addresses and private keys from give HDSeed.
-pub fn generate_wallet_from_seed(count: u32, seed: Vec<u8>, coin_type: Option<u32>, nobip39: bool) -> String {
+pub fn generate_wallet_from_seed(zcount: u32, tcount: u32, seed: Vec<u8>, coin_type: Option<u32>, nobip39: bool) -> String {
 
     let cointype = match coin_type {
         Some(s) => s,
         None => params().cointype
     };
 
-    return gen_addresses_with_seed_as_json(count, |i| (seed.clone(), i), cointype, nobip39);
+    return gen_addresses_with_seed_as_json(zcount, tcount, |i| (seed.clone(), i), cointype, nobip39);
 
 }
 /**
@@ -394,12 +396,41 @@ pub fn generate_wallet_from_seed(count: u32, seed: Vec<u8>, coin_type: Option<u3
  *
  * It is useful if we want to reuse (or not) the seed across multiple wallets.
  */
-fn gen_addresses_with_seed_as_json<F>(count: u32, mut get_seed: F, coin_type: u32, nobip39: bool) -> String
+fn gen_addresses_with_seed_as_json<F>(zcount: u32, tcount: u32, mut get_seed: F, coin_type: u32, nobip39: bool) -> String
     where F: FnMut(u32) -> (Vec<u8>, u32)
 {
     let mut ans = array![];
 
-    for i in 0..count {
+    for j in 0..tcount {
+        let (seed, child) = get_seed(j);
+        let (addr, sk) = get_taddress(&seed, child, coin_type, nobip39);
+
+        let div= object!{
+            "d1"    => "",
+            "d2"    => "",
+            "d3"    => "",
+            "d4"    => "",
+            "d5"    => ""
+        };
+
+        let path = object!{
+            "Phrase"    => "",
+            "HDSeed"    => "",
+            "Bip39Seed" => "",
+            "path"      => format!("m/32'/{}'/{}'", coin_type, child)
+        };
+
+        ans.push(object!{
+                "num"           => j,
+                "address"       => addr,
+                "diversified"   => div,
+                "viewing_key"   => "",
+                "private_key"   => sk,
+                "seed"          => path
+        }).unwrap();
+    }
+
+    for i in 0..zcount {
         let (seed, child) = get_seed(i);
         let (addr, div, fvk, pk, path) = get_address(&seed, child, coin_type, nobip39);
         ans.push(object!{
@@ -601,7 +632,7 @@ mod tests {
             let seed = hex::decode(i["seed"].as_str().unwrap()).unwrap();
             let num  = i["num"].as_u32().unwrap();
 
-            let addresses = gen_addresses_with_seed_as_json(num+1, |child| (seed.clone(), child, params().cointype, false));
+            let addresses = gen_addresses_with_seed_as_json(num+1, num+1, |child| (seed.clone(), child, params().cointype, false));
 
             let j = json::parse(&addresses).unwrap();
             assert_eq!(j[num as usize]["address"], i["addr"]);

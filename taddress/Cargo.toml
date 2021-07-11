@@ -1,0 +1,17 @@
+[package]
+name = "taddresslib"
+version = "0.1.0"
+authors = ["forge"]
+edition = "2018"
+
+[features]
+default = []
+
+[dependencies]
+secp256k1 = "0.19.0"
+tiny-bip39 = "0.6.2"
+ring = "0.16.9"
+lazy_static = "1.2.0"
+ripemd160 = "0.8.0"
+sha2 = "0.8.0"
+base58 = "0.1.0"

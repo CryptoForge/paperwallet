@@ -60,7 +60,7 @@ fn main() {
                 .takes_value(true)
                 .default_value("1"))
        .arg(Arg::with_name("BIP44CoinType")
-                .short("t")
+                .short("c")
                 .long("cointype")
                 .help("The Bip44 coin type used in the derivation path")
                 .takes_value(true)
@@ -79,6 +79,16 @@ fn main() {
                          Ok(_)   => return Ok(()),
                          Err(_)  => return Err(format!("Number of addresses '{}' is not a number", i))
                  }))
+         .arg(Arg::with_name("t_addresses")
+                  .short("t")
+                  .long("taddrs")
+                  .help("Number of t addresses to generate")
+                  .takes_value(true)
+                  .default_value("0")
+                  .validator(|i:String| match i.parse::<i32>() {
+                          Ok(_)   => return Ok(()),
+                          Err(_)  => return Err(format!("Number of addresses '{}' is not a number", i))
+                  }))
        .get_matches();
 
     let nohd: bool    = matches.is_present("nohd");
@@ -107,6 +117,8 @@ fn main() {
     // Number of z addresses to generate
     let z_addresses = matches.value_of("z_addresses").unwrap().parse::<u32>().unwrap();
 
+    let t_addresses = matches.value_of("t_addresses").unwrap().parse::<u32>().unwrap();
+
     let cointype = if !matches.value_of("BIP44CoinType").is_none() {
         Some(matches.value_of("BIP44CoinType").unwrap().parse::<u32>().unwrap())
     } else {
@@ -125,7 +137,12 @@ fn main() {
         }
 
         if z_addresses != 1 {
-            eprintln!("Can only generate 1 zaddress in vanity mode. You specified {}", z_addresses);
+            eprintln!("Can only generate 1 zaddress in vanity mode. You specified {} zaddresses", z_addresses);
+            return;
+        }
+
+        if t_addresses != 0 {
+            eprintln!("Can only generate 1 zaddress in vanity mode. You specified {} taddresses", t_addresses);
             return;
         }
 
@@ -164,7 +181,7 @@ fn main() {
 
         print!("Generating {} Sapling addresses from seed phrase...", z_addresses);
         io::stdout().flush().ok();
-        let addresses = generate_wallet_from_seed_phrase(z_addresses, phrase, cointype, nobip39);
+        let addresses = generate_wallet_from_seed_phrase(z_addresses, t_addresses, phrase, cointype, nobip39);
         println!("[OK]");
 
         addresses
@@ -189,7 +206,7 @@ fn main() {
             return;
         }
 
-        let addresses = generate_wallet_from_seed(z_addresses, seed, cointype, nobip39);
+        let addresses = generate_wallet_from_seed(z_addresses, t_addresses, seed, cointype, nobip39);
         println!("[OK]");
 
         addresses
@@ -213,7 +230,7 @@ fn main() {
 
         print!("Generating {} Sapling addresses...", z_addresses);
         io::stdout().flush().ok();
-        let addresses = generate_wallet(nohd, z_addresses, &entropy, cointype, nobip39);
+        let addresses = generate_wallet(nohd, z_addresses, t_addresses, &entropy, cointype, nobip39);
         println!("[OK]");
 
         addresses

@@ -21,6 +21,7 @@ ripemd160 = "0.8.0"
 sha2 = "0.8.0"
 base58 = "0.1.0"
 tiny-bip39 = "0.6.2"
+taddresslib = {path = "../taddress"}
 
 [dev-dependencies]
 array2d = "0.1.0"
